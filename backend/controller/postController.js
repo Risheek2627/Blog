@@ -1,4 +1,30 @@
 const db = require("../config/db");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+});
+
+// Set up Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "blog_images", // Folder name in Cloudinary
+    format: async (req, file) => "jpg", // Supports 'png', 'jpeg', etc.
+    public_id: (req, file) => Date.now(), // Unique identifier
+  },
+});
+
+// Initialize multer with Cloudinary storage
+const upload = multer({ storage }); // use multer for file uploads
 
 const getAllPosts = async (req, res) => {
   try {
@@ -19,19 +45,19 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
+    const image = req.file ? req.file.path : null;
     if (!title || !content) {
       return res.json({ message: "Pls fill the fields" });
     }
 
     const [post] = await db.query(
-      "INSERT INTO posts (title,content) VALUES (?,?)",
-      [title, content]
+      "INSERT INTO posts (title,content,image) VALUES (?,?,?)",
+      [title, content, image]
     );
 
-    res.status(201).json({
-      message: "Post added successfully",
-      postId: post.insertId, // Assuming `insertId` is the ID of the newly inserted post
-    });
+    res.status(201).json(
+      post // Assuming `insertId` is the ID of the newly inserted post
+    );
   } catch (err) {
     console.error(err);
   }
@@ -85,4 +111,4 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, createPost, getPostById, deletePost };
+module.exports = { getAllPosts, createPost, getPostById, deletePost, upload };
