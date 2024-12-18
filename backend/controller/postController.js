@@ -42,27 +42,78 @@ const getAllPosts = async (req, res) => {
 };
 
 // create post
+// const createPost = async (req, res) => {
+//   try {
+//     const { title, content } = req.body;
+
+//     if (!title || !content) {
+//       return res.json({ message: "Pls fill the fields" });
+//     }
+
+//     let imageUrl =  null;
+
+//     const [post] = await db.query(
+//       "INSERT INTO posts (title,content,image) VALUES (?,?,?)",
+//       [title, content, image]
+//     );
+
+//     res.status(201).json(
+//       post // Assuming `insertId` is the ID of the newly inserted post
+//     );
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
 const createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const image = req.file ? req.file.path : null;
+
+    // Validate required fields
     if (!title || !content) {
-      return res.json({ message: "Pls fill the fields" });
+      return res.status(400).json({ message: "Please fill in all the fields" });
     }
 
+    let imageUrl = null; // Initialize imageUrl variable
+
+    // Upload image to Cloudinary if a file is provided
+    if (req.file) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: "blog_images", // Save images in the 'blog_images' folder
+          use_filename: true, // Use the original filename
+          unique_filename: false, // Allow duplicate names
+        });
+        imageUrl = uploadResult.secure_url; // Get the secure URL for the uploaded image
+      } catch (error) {
+        console.error("Error uploading to Cloudinary:", error);
+        return res.status(500).json({ message: "Image upload failed", error });
+      }
+    }
+
+    // Insert the post into the database
     const [post] = await db.query(
-      "INSERT INTO posts (title,content,image) VALUES (?,?,?)",
-      [title, content, image]
+      "INSERT INTO posts (title, content, image) VALUES (?, ?, ?)",
+      [title, content, imageUrl]
     );
 
-    res.status(201).json(
-      post // Assuming `insertId` is the ID of the newly inserted post
-    );
+    // Return success response
+    res.status(201).json({
+      message: "Post created successfully",
+      post: {
+        id: post.insertId, // ID of the newly created post
+        title,
+        content,
+        image: imageUrl,
+      },
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Error creating post:", err);
+    res.status(500).json({ message: "Failed to create post", error: err });
   }
 };
 
+//get post by id
 const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
