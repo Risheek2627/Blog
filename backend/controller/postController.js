@@ -68,10 +68,16 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
+    const userId = req.user.id; // Get the logged-in user's ID from the token
 
     // Validate required fields
     if (!title || !content) {
       return res.status(400).json({ message: "Please fill in all the fields" });
+    }
+
+    // Check if the user is an admin (you can also check this directly using `req.user.role`)
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Only admins can create posts" });
     }
 
     let imageUrl = null; // Initialize imageUrl variable
@@ -93,8 +99,8 @@ const createPost = async (req, res) => {
 
     // Insert the post into the database
     const [post] = await db.query(
-      "INSERT INTO posts (title, content, image) VALUES (?, ?, ?)",
-      [title, content, imageUrl]
+      "INSERT INTO posts (title, content, image,user_id) VALUES (?, ?, ?,?)",
+      [title, content, imageUrl, userId]
     );
 
     // Return success response
@@ -105,6 +111,7 @@ const createPost = async (req, res) => {
         title,
         content,
         image: imageUrl,
+        user_id: userId,
       },
     });
   } catch (err) {
