@@ -10,6 +10,13 @@ const {
 
 const { register, login, isAdmin } = require("../controller/authController");
 
+const {
+  getComment,
+  getLike,
+  addComment,
+  addLike,
+} = require("../controller/like_comment");
+
 const router = express.Router();
 
 // Routes definition
@@ -22,3 +29,11 @@ module.exports = router;
 //Auth
 router.post("/register", register);
 router.post("/login", login);
+
+//likes
+router.post("/likes", addLike);
+router.get("/likes/:post_id", getLike);
+
+//comments
+router.post("/comments", addComment);
+router.get("/comments/:post_id", getComment);

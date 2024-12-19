@@ -11,6 +11,7 @@ import CreatePost from "./pages/CreatePost";
 import Blog from "./pages/Blog";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import "font-awesome/css/font-awesome.min.css";
 
 // function App() {
 //   return (
