@@ -158,6 +158,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -181,8 +182,10 @@ export default function CreatePost() {
     if (image) formData.append("image", image);
 
     // Post creation request
-    axios
-      .post("http://localhost:5000/api/create-post", formData, {
+    // axios
+    //   .post("http://localhost:5000/api/create-post", formData, {
+    api
+      .post("/api/create-post", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

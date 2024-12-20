@@ -4,14 +4,16 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate for redire
 import PostCard from "../components/PostCard";
 import Header from "../components/Header"; // Import Header component
 import Footer from "../components/Footer"; // Import Footer component
-
+import api from "../api/api";
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/posts")
+    // axios
+    //   .get("http://localhost:5000/api/posts")
+    api
+      .get("/api/posts")
       .then((response) => {
         setPosts(response.data.result);
       })
