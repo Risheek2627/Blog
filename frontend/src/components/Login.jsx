@@ -86,17 +86,17 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // try {
-    //   const response = await axios.post("http://localhost:5000/api/login", {
-    //     email,
-    //     password,
-    //   });
-
     try {
-      const response = await api.post("/api/login", {
+      const response = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
       });
+
+      // try {
+      //   const response = await api.post("/api/login", {
+      //     email,
+      //     password,
+      //   });
 
       // Store JWT token in localStorage
       const token = response.data.token;

@@ -964,10 +964,10 @@ export default function Blog() {
     }
 
     // Fetch posts
-    // axios
-    //   .get("http://localhost:5000/api/posts")
-    api
-      .get("/api/posts")
+    axios
+      .get("http://localhost:5000/api/posts")
+      // api
+      //   .get("/api/posts")
       .then((response) => {
         setPosts(response.data.result);
         response.data.result.forEach((post) => {
@@ -982,10 +982,10 @@ export default function Blog() {
   }, []);
 
   const fetchComments = (postId) => {
-    // axios
-    //   .get(`http://localhost:5000/api/comments/${postId}`)
-    api
-      .get(`/api/comments/${postId}`)
+    axios
+      .get(`http://localhost:5000/api/comments/${postId}`)
+      // api
+      //   .get(`/api/comments/${postId}`)
       .then((response) => {
         setComments((prev) => ({
           ...prev,
@@ -998,13 +998,14 @@ export default function Blog() {
   };
 
   const fetchLikes = (postId) => {
-    // axios
-    //   .get(`http://localhost:5000/api/likes/${postId}`)
-    api
-      .get(`/api/likes/${postId}`)
+    axios
+      .get(`http://localhost:5000/api/likes/${postId}`)
+      // api
+      //   .get(`/api/likes/${postId}`)
       .then((response) => {
         setLikes((prev) => ({
           ...prev,
+
           [postId]: response.data.like_count,
         }));
       })
@@ -1018,18 +1019,18 @@ export default function Blog() {
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.user_id;
 
-    // axios
-    //   .post("http://localhost:5000/api/comments", {
-    //     post_id: postId,
-    //     user_id: userId,
-    //     content: newComment,
-    //   })
-    api
-      .post("/api/comments", {
+    axios
+      .post("http://localhost:5000/api/comments", {
         post_id: postId,
         user_id: userId,
         content: newComment,
       })
+      // api
+      //   .post("/api/comments", {
+      //     post_id: postId,
+      //     user_id: userId,
+      //     content: newComment,
+      //   })
       .then(() => {
         setNewComment("");
         setShowCommentBox(null); // Close comment box
@@ -1045,16 +1046,16 @@ export default function Blog() {
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.user_id;
 
-    // axios
-    //   .post("http://localhost:5000/api/likes", {
-    //     post_id: postId,
-    //     user_id: userId,
-    //   })
-    api
-      .post("/api/likes", {
+    axios
+      .post("http://localhost:5000/api/likes", {
         post_id: postId,
         user_id: userId,
       })
+      // api
+      //   .post("/api/likes", {
+      //     post_id: postId,
+      //     user_id: userId,
+      //   })
       .then(() => {
         fetchLikes(postId); // Refresh likes count
       })
@@ -1064,10 +1065,10 @@ export default function Blog() {
   };
 
   const deletePost = (postId) => {
-    // axios
-    //   .delete(`http://localhost:5000/api/delete-posts/${postId}`)
-    api
-      .delete(`/api/delete-posts/${postId}`)
+    axios
+      .delete(`http://localhost:5000/api/delete-posts/${postId}`)
+      // api
+      //   .delete(`/api/delete-posts/${postId}`)
       .then(() => {
         // Remove the deleted post from the UI
         setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));

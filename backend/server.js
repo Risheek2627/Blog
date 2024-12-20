@@ -6,13 +6,13 @@ const app = express();
 
 const postRoutes = require("./routes/postRoutes");
 
-const corsOptions = {
-  origin: "https://blog-frontend-02n9.onrender.com", // Frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "https://blog-frontend-02n9.onrender.com", // Frontend URL
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // app.get("/", (req, res) => {
