@@ -183,9 +183,7 @@ export default function CreatePost() {
 
     // Post creation request
     axios
-      .post("http://localhost:5000/api/create-post", formData, {
-        // api
-        //   .post("/api/create-post", formData, {
+      .post("http://localhost:5000/api/create-posts", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

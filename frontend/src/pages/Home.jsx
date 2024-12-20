@@ -291,6 +291,12 @@ export default function Home() {
       subtitle: "Improve your writing skills",
       overlay: "bg-gradient-to-r from-indigo-900/70 to-blue-900/70",
     },
+    {
+      image: "/src/assets/images/image7.jpg",
+      title: "Tips for good health",
+      subtitle: "Improve your diet",
+      overlay: "bg-gradient-to-r from-yellow-900/70 to-purple-900/70",
+    },
   ];
 
   return (
@@ -314,7 +320,7 @@ export default function Home() {
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="w-full h-[400px] object-cover rounded-xl"
+                  className="w-full h-[650px] object-cover rounded-xl"
                 />
                 {/* Gradient Overlay with Text */}
                 <div

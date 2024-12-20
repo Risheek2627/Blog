@@ -70,6 +70,8 @@ const createPost = async (req, res) => {
     const { title, content } = req.body;
     const userId = req.user.id; // Get the logged-in user's ID from the token
 
+    console.log(req.body);
+    console.log(userId);
     // Validate required fields
     if (!title || !content) {
       return res.status(400).json({ message: "Please fill in all the fields" });
