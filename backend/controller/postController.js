@@ -171,4 +171,37 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, createPost, getPostById, deletePost, upload };
+const searchPosts = async (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: "query parameter is required" });
+  } else {
+    console.log(query);
+  }
+
+  try {
+    const [results] = await db.query(
+      "SELECT * FROM posts WHERE title LIKE ? OR content LIKE?",
+      [`%${query}%`, `%${query}%`]
+    );
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No posts found" });
+    }
+
+    res.status(200).json({ message: "post found", posts: results });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+module.exports = {
+  getAllPosts,
+  createPost,
+  getPostById,
+  deletePost,
+  upload,
+  searchPosts,
+};

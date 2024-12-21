@@ -6,6 +6,7 @@ const {
   getPostById,
   deletePost,
   upload,
+  searchPosts,
 } = require("../controller/postController");
 
 const { register, login, isAdmin } = require("../controller/authController");
@@ -24,6 +25,7 @@ router.get("/posts", getAllPosts); // Get all posts
 router.post("/create-posts", isAdmin, upload.single("image"), createPost); // Create a new post
 router.get("/posts/:id", getPostById); // Get a single post by ID
 router.delete("/delete-posts/:id", deletePost);
+router.get("/search", searchPosts);
 module.exports = router;
 
 //Auth
